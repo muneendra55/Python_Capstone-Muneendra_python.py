@@ -1,0 +1,36 @@
+import random #importing random
+import time
+
+def generate_otp():  # Function to generate a 6-digit OTP
+    otp = ''.join(str(random.randint(0,9)) for _ in range(6))
+    return otp
+
+def verify_otp(generated_otp):   # Function to send OTP to user's email
+    print(f"\nEmail sent for OTP verification: {generated_otp}")
+    
+    start_time = time.time() 
+    max_attempts = 3      #maximum attempts
+    otp_valid_time = 300 # OTP expires in 5 minutes (300 seconds)
+
+    for attempt in range(max_attempts):
+        entered_otp = input("Enter the OTP: ")
+        elapsed_time = time.time() - start_time
+
+        if elapsed_time > otp_valid_time:
+            print("OTP has expired. Please request a new one.")
+            return False 
+
+        if len(entered_otp) != 6 or not entered_otp.isdigit():
+            print("Invalid OTP format. Please enter a 6-digit number.")
+        elif entered_otp == generated_otp:
+            print("OTP verified successfully!")
+            return True
+        else:
+            print("Incorrect OTP. Please try again.")
+
+    print("Maximum attempts exceeded. Please request a new OTP.")
+    return False
+
+if __name__ == "__main__":
+    otp = generate_otp()
+    verify_otp(otp)
